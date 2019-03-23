@@ -23,3 +23,20 @@ exports.getAllProducts = (req, res) => {
     res.send(error);
   })
 }
+
+exports.updateProduct = (req,res) => {
+  console.log(req.body,'body')
+  if(!req.body.name || !req.body.amount){
+    res.send({
+      code: 403,
+      message: "Name and amount are required"
+    })
+  }
+  productService.updateProduct(req.body).then((response) =>{
+    res.send(response);
+  })
+  .catch((err) => {
+    res.send(err);
+    console.log(err,'err');
+  })
+}

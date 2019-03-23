@@ -29,14 +29,3 @@ exports.login = (req, res) => {
 
 
 };
-
-exports.getUser = (req, res) => {
-  registrationService
-    .getUserDetails(req.params.id)
-    .then(result => {
-      res.send(result);
-    })
-    .catch(err => {
-      res.send(err);
-    });
-};

@@ -16,6 +16,23 @@ function addProduct(productInfo){
     } )
 }
 
+function updateProduct(productInfo) {
+  console.log(productInfo,'info')
+  return new Promise((resolve, reject) => {
+      Product.update({_id: productInfo._id},
+          { $set:
+           {
+             amount: productInfo.amount,
+             name: productInfo.name
+           }
+      }).then((res)=>{
+          return resolve({
+            message: "record updated successfully"
+          });
+        })
+  })
+}
+
 function getAllProducts() {
   return new Promise((resolve, reject) =>{
     Product.find().then((productInfo) => {
@@ -29,7 +46,31 @@ function getAllProducts() {
   });
 }
 
+// 
+// function getProductInfo(productList){
+//   return new Promise((resolve, reject) => {
+//     const list = [];
+//
+//    productList.forEach((product) => {
+//         Product.findOne({_id: product.productId}).then((res) => {
+//         console.log(res,'result')
+//         product.amount = res.amount;
+//         product.name = res.name;
+//         list.push(product);
+//         return resolve(list);
+//       })
+//     })
+//     Promise.all(list).then(data => {
+//       console.log(data,'data')
+//       return resolve(data);
+//
+//     })
+//   });
+// }
+
+
 module.exports ={
   addProduct,
-  getAllProducts
+  getAllProducts,
+  updateProduct,
 }

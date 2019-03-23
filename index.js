@@ -16,6 +16,8 @@ consign()
 // Including route files
 const register = require("./routes/registrationRoute");
 const product = require("./routes/productRoute");
+const cart = require("./routes/cartRoute");
+
 
 
 app.use(bodyParser.urlencoded({
@@ -26,6 +28,8 @@ app.use(bodyParser.json());
 
 app.use("/api", register);
 app.use("/api", product);
+app.use("/api", cart);
+
 
 
 app.use(express.static(publicDir));
@@ -37,7 +41,7 @@ app.get('/', (req, res) => {
 mongoose.Promise = global.Promise;
 mongoose
   .connect(
-    "mongodb://localhost:27017/OSS",
+    "mongodb://localhost:27017/Product",
     { useNewUrlParser: true }
   );
 var db = mongoose.connection;

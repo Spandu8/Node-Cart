@@ -46,9 +46,9 @@ function registerUser(user) {
 }
 
 function login(userDetails) {
-  console.log(userDetails,'userDetails');
   return new Promise((resolve, reject) => {
     Registration.findOne({userName: userDetails.userName}).then(user => {
+
       if(user){
         return resolve (authenticateUser(user, userDetails.password));
       }
@@ -66,7 +66,6 @@ function login(userDetails) {
 
 function authenticateUser(user, password) {
   return new Promise((resolve, reject) => {
-    console.log(user.password,password,'pass')
     if(user.password === password) {
         return resolve(getAuthenticatedResponse(user));
     }
@@ -87,8 +86,9 @@ function getAuthenticatedResponse(user) {
     var userData = user;
     var data = {};
     data.userName = userData.userName;
-    data.id = userData.id;
+    data._id = userData._id;
     data.email = userData.email;
+    data.isAdmin = userData.isAdmin;
     data.token = authenticate(userData);
     return data;
 
@@ -100,7 +100,7 @@ function authenticate(userData) {
   }
   // generate a user id and authenticate
   var payload = {
-    userInfo: userData.id
+    userInfo: userData._id
   };
   // return token and user information with a refresh token
   var options = {
@@ -110,30 +110,11 @@ function authenticate(userData) {
   return jwt.sign(payload, secret, options);
 }
 
-function getUserDetails(id) {
-  return new Promise((resolve, reject) => {
-    Registration.findOne({ _id: id })
-      .then(user => {
-        return resolve(userDetails(user));
-      })
-      .catch(err => {
-        return reject(err);
-      });
-  });
-}
 
-function userDetails(user) {
-  var data = {};
-  data.userName = user.userName;
-  data.email = user.email;
-  data.id = user.id;
-  return data;
-}
 
 module.exports = {
   registerUser,
   verifyUserNameExist,
   authenticateUser,
-  getUserDetails,
   login
 };
