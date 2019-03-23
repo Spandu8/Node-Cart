@@ -13,7 +13,6 @@ exports.addToCart = (req,res) => {
 
 
 exports.getCartDetails = (req,res) => {
-console.log(req.query.id,'req.query.id')
   cartService.getCartDetails(req.query.id).then((response) =>{
     res.send(response);
   })

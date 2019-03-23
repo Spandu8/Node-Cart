@@ -17,7 +17,6 @@ function addProduct(productInfo){
 }
 
 function updateProduct(productInfo) {
-  console.log(productInfo,'info')
   return new Promise((resolve, reject) => {
       Product.update({_id: productInfo._id},
           { $set:
@@ -45,28 +44,6 @@ function getAllProducts() {
     })
   });
 }
-
-// 
-// function getProductInfo(productList){
-//   return new Promise((resolve, reject) => {
-//     const list = [];
-//
-//    productList.forEach((product) => {
-//         Product.findOne({_id: product.productId}).then((res) => {
-//         console.log(res,'result')
-//         product.amount = res.amount;
-//         product.name = res.name;
-//         list.push(product);
-//         return resolve(list);
-//       })
-//     })
-//     Promise.all(list).then(data => {
-//       console.log(data,'data')
-//       return resolve(data);
-//
-//     })
-//   });
-// }
 
 
 module.exports ={

@@ -25,7 +25,6 @@ exports.getAllProducts = (req, res) => {
 }
 
 exports.updateProduct = (req,res) => {
-  console.log(req.body,'body')
   if(!req.body.name || !req.body.amount){
     res.send({
       code: 403,

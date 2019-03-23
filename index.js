@@ -1,7 +1,5 @@
 const express = require("express");
 const consign = require("consign");
-const https = require("https");
-const fs = require("fs");
 var mongoose = require("mongoose");
 
 const bodyParser = require("body-parser");
