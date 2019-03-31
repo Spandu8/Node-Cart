@@ -3,6 +3,12 @@ const bcrypt = require("bcrypt");
 
 exports.registerUser = (req, res) => {
   var user = req.body;
+  if(!user.email || !user.userName || !user.password) {
+    res.send({
+      code:400,
+      message: 'All fields are mandatory '
+    })
+  } else{
     registrationService
       .registerUser(req.body)
       .then(result => {
@@ -11,6 +17,7 @@ exports.registerUser = (req, res) => {
       .catch(err => {
         res.send(err);
       });
+    }
 };
 
 exports.login = (req, res) => {

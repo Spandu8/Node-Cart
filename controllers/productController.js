@@ -17,7 +17,7 @@ exports.addProduct = (req,res) => {
 }
 
 exports.getAllProducts = (req, res) => {
-  productService.getAllProducts().then((response) => {
+  productService.getAllProducts(req.query.userId).then((response) => {
     res.send(response);
   }).catch((error) => {
     res.send(error);

@@ -7,7 +7,7 @@ function addToCart(data){
       const cart = new Cart(data);
       cart.save(data).then((res) => {
         return resolve({
-          message: "Product added to cart successfully"
+          message: "Product added to cart successfully",
         });
       }).catch((err) => {
         return reject({

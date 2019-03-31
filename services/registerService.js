@@ -30,7 +30,9 @@ function registerUser(user) {
         registration
           .save()
           .then(data => {
-            return resolve("user registered successfully");
+            return resolve({
+              message: "user registered successfully"
+            });
 
           })
           .catch(err => {

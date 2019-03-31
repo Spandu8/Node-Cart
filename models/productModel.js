@@ -8,8 +8,12 @@ var productSchema = new Schema({
     required: true
   },
   amount: {
-    type: String,
+    type: Number,
     required: true
+  },
+  isAddedToCart: {
+    type: Boolean,
+    default: false
   }
 });
 

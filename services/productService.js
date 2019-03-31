@@ -1,4 +1,7 @@
 const Product = require("../models/productModel");
+const Cart_Service = require("../services/cartService");
+var _ = require('lodash');
+var ObjectId = require('mongodb').ObjectID;
 
 function addProduct(productInfo){
     return new Promise((resolve,reject) => {
@@ -32,10 +35,12 @@ function updateProduct(productInfo) {
   })
 }
 
-function getAllProducts() {
+function getAllProducts(userId) {
   return new Promise((resolve, reject) =>{
     Product.find().then((productInfo) => {
-      return resolve(productInfo);
+      if(productInfo.length) {
+        return resolve(filterProducts(userId, productInfo));
+      }
     }).catch((err) => {
       return reject({
         code: 500,
@@ -43,6 +48,24 @@ function getAllProducts() {
       })
     })
   });
+}
+
+function filterProducts(userId, productInfo) {
+    return new Promise((resolve, reject) => {
+      Cart_Service.getCartDetails(userId).then((res) => {
+          productInfo.filter(function (list) {
+             return res.some(function (data) {
+               return list._id.equals(ObjectId(data.productId)) ? list.isAddedToCart= true : list.isAddedToCart = false;
+             });
+           });
+           return resolve(productInfo);
+      }).catch((err) => {
+        return reject({
+          code: 500,
+          message: 'Internal Server Error'
+        })
+      });
+    });
 }
 
 
