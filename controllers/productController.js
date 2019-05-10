@@ -39,3 +39,11 @@ exports.updateProduct = (req,res) => {
     console.log(err,'err');
   })
 }
+
+exports.deleteProduct = (req,res) => {
+  productService.deleteProduct(req.query.id).then((response) => {
+    res.send(response);
+  }).catch((error) => {
+    res.send(error);
+  })
+}

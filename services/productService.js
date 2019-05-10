@@ -38,8 +38,12 @@ function updateProduct(productInfo) {
 function getAllProducts(userId) {
   return new Promise((resolve, reject) =>{
     Product.find().then((productInfo) => {
+      console.log(productInfo,'productInfo')
       if(productInfo.length) {
         return resolve(filterProducts(userId, productInfo));
+      }else{
+        console.log(productInfo,'productInfo else')
+        return resolve (productInfo);
       }
     }).catch((err) => {
       return reject({
@@ -68,9 +72,31 @@ function filterProducts(userId, productInfo) {
     });
 }
 
+function deleteProduct(productId) {
+  return new Promise((resolve,reject) => {
+    Product.findOne({_id: productId}).then((res) => {
+      Product.deleteOne({_id: productId}).then(() => {
+          return resolve({
+            message: "Product deleted successfully"
+          })
+      }).catch((error) => {
+          return reject({
+            code: 500,
+            message: 'Imternal Server Error'
+          })
+      })
+
+    }).catch((error) => {
+      return reject({
+        message:'Product does not exist'
+      })
+    })
+  })
+}
 
 module.exports ={
   addProduct,
   getAllProducts,
   updateProduct,
+  deleteProduct
 }
