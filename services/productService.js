@@ -74,18 +74,8 @@ function filterProducts(userId, productInfo) {
 
 function deleteProduct(productId) {
   return new Promise((resolve,reject) => {
-    Product.findOne({_id: productId}).then((res) => {
-      Product.deleteOne({_id: productId}).then(() => {
-          return resolve({
-            message: "Product deleted successfully"
-          })
-      }).catch((error) => {
-          return reject({
-            code: 500,
-            message: 'Imternal Server Error'
-          })
-      })
-
+    Product.findByIdAndDelete({_id: productId}).then((res) => {
+      return resolve (Cart_Service.deleteProductFromCart(productId)); 
     }).catch((error) => {
       return reject({
         message:'Product does not exist'

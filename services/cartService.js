@@ -32,8 +32,30 @@ function getCartDetails(id){
     } )
 }
 
+function deleteProductFromCart(id) {
+  return new Promise((resolve, reject) => {
+    Cart.find({productId: id}).then(res => {    
+      Cart.deleteOne({productId: id}).then(() => {
+        return resolve({
+          message: "Product deleted successfully"
+        })
+      }).catch((error) => {
+        return reject({
+          code: 500,
+          message: 'Imternal Server Error'
+        })
+      })
+    }).catch((error) => {
+      return reject({
+        code: 500,
+        message: 'Imternal Server Error'
+      })
+    })
+  })
+}
 
 module.exports ={
   addToCart,
-  getCartDetails
+  getCartDetails,
+  deleteProductFromCart
 }
