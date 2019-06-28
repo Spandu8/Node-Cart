@@ -3,6 +3,7 @@ const consign = require("consign");
 var mongoose = require("mongoose");
 
 const bodyParser = require("body-parser");
+const socket = require("./public/socket");
 
 var publicDir = require('path').join(__dirname,'/public');
 const app = express();

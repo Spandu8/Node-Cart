@@ -14,7 +14,17 @@ var productSchema = new Schema({
   isAddedToCart: {
     type: Boolean,
     default: false
-  }
+  },
+  fileUpload: {
+    name: {
+      type: String,
+      required: true
+    },
+    originalName: {
+      type: String,
+      required: true
+    }
+ }
 });
 
 module.exports = mongoose.model('product', productSchema);

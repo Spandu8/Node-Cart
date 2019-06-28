@@ -7,7 +7,6 @@ exports.addToCart = (req,res) => {
   })
   .catch((err) => {
     res.send(err);
-    console.log(err,'err');
   })
 }
 
@@ -18,6 +17,5 @@ exports.getCartDetails = (req,res) => {
   })
   .catch((err) => {
     res.send(err);
-    console.log(err,'err');
   })
 }

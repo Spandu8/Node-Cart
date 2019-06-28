@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 const passport = require("passport");
 
 function verifyUserNameExist(user) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     Registration.find({
       $or: [{ userName: user.userName }, { email: user.email }]
     }).then(users => {
@@ -49,14 +49,14 @@ function registerUser(user) {
 
 function login(userDetails) {
   return new Promise((resolve, reject) => {
-    Registration.findOne({userName: userDetails.userName}).then(user => {
+    Registration.findOne({ userName: userDetails.userName }).then(user => {
 
-      if(user){
-        return resolve (authenticateUser(user, userDetails.password));
+      if (user) {
+        return resolve(authenticateUser(user, userDetails.password));
       }
       else {
         return reject({
-          code:403,
+          code: 403,
           message: "user name does not exist"
         })
       }
@@ -68,10 +68,10 @@ function login(userDetails) {
 
 function authenticateUser(user, password) {
   return new Promise((resolve, reject) => {
-    if(user.password === password) {
-        return resolve(getAuthenticatedResponse(user));
+    if (user.password === password) {
+      return resolve(getAuthenticatedResponse(user));
     }
-    else{
+    else {
       return reject({
         code: 403,
         message: "Invalid Password"
@@ -81,19 +81,35 @@ function authenticateUser(user, password) {
 }
 
 function getAuthenticatedResponse(user) {
-  if (!user) {
-    return null;
-  }
+  return new Promise((resolve, reject) => {
+    if (!user) {
+      reject({
+        code: 400,
+        message:'User does not exit'
+      })
+    } else {
+      if (user.isAdmin) {
+        resolve(formatedResponse(user, null));
+      } else {
+        generateRoomId(user._id, 8).then(roomId => {
+          resolve(formatedResponse(user, roomId));
+        })
+      }
+    }
+  })
 
-    var userData = user;
-    var data = {};
-    data.userName = userData.userName;
-    data._id = userData._id;
-    data.email = userData.email;
-    data.isAdmin = userData.isAdmin;
-    data.token = authenticate(userData);
-    return data;
+}
 
+function formatedResponse(user, roomId) {
+  var userData = user;
+  var data = {};
+  data.userName = userData.userName;
+  data._id = userData._id;
+  data.email = userData.email;
+  data.isAdmin = userData.isAdmin;
+  data.roomId = roomId;
+  data.token = authenticate(userData);
+  return data;
 }
 
 function authenticate(userData) {
@@ -112,6 +128,14 @@ function authenticate(userData) {
   return jwt.sign(payload, secret, options);
 }
 
+async function generateRoomId(userId, length) {
+  let string = '0123456789abcdefghijklmnopqrstuvwxyz';
+  let result = '';
+  for (let i = 0; i <= length; i++) {
+    result = result + string[Math.floor(Math.random() * string.length)];
+  }
+  return await result;
+}
 
 
 module.exports = {

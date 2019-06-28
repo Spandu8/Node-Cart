@@ -3,12 +3,16 @@ const Cart_Service = require("../services/cartService");
 var _ = require('lodash');
 var ObjectId = require('mongodb').ObjectID;
 
-function addProduct(productInfo){
+function addProduct(productInfo, file){
     return new Promise((resolve,reject) => {
+      productInfo.fileUpload = {
+        name: file.filename,
+        originalName: file.originalname
+      };
       const product = new Product(productInfo);
       product.save(productInfo).then((res) => {
         return resolve({
-          message: "Product added successfully"
+          message: ""
         });
       }).catch((err) => {
         return reject({
@@ -16,7 +20,7 @@ function addProduct(productInfo){
           message: 'Internal Server Error'
         })
       })
-    } )
+    })
 }
 
 function updateProduct(productInfo) {
@@ -38,11 +42,9 @@ function updateProduct(productInfo) {
 function getAllProducts(userId) {
   return new Promise((resolve, reject) =>{
     Product.find().then((productInfo) => {
-      console.log(productInfo,'productInfo')
       if(productInfo.length) {
         return resolve(filterProducts(userId, productInfo));
       }else{
-        console.log(productInfo,'productInfo else')
         return resolve (productInfo);
       }
     }).catch((err) => {
@@ -65,7 +67,7 @@ function filterProducts(userId, productInfo) {
            return resolve(productInfo);
       }).catch((err) => {
         return reject({
-          code: 500,
+          code: 400,
           message: 'Internal Server Error'
         })
       });
@@ -75,9 +77,9 @@ function filterProducts(userId, productInfo) {
 function deleteProduct(productId) {
   return new Promise((resolve,reject) => {
     Product.findByIdAndDelete({_id: productId}).then((res) => {
-      return resolve (Cart_Service.deleteProductFromCart(productId)); 
+       resolve (Cart_Service.deleteProductFromCart(productId)); 
     }).catch((error) => {
-      return reject({
+       reject({
         message:'Product does not exist'
       })
     })
