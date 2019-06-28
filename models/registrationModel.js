@@ -17,6 +17,10 @@ var registrationSchema = new Schema({
     },
     isAdmin: {
       type: Boolean
+    },
+    socketId: {
+        type: String,
+        default: null
     }
 
 });
